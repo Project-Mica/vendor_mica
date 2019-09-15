@@ -126,3 +126,6 @@ PRODUCT_COPY_FILES += \
 # Copy all mica-specific init rc files
 $(foreach f,$(wildcard vendor/mica/prebuilt/common/etc/init/*.rc),\
     $(eval PRODUCT_COPY_FILES += $(f):$(TARGET_COPY_OUT_SYSTEM)/etc/init/$(notdir $f)))
+
+# Fonts
+include vendor/mica/config/fonts.mk
