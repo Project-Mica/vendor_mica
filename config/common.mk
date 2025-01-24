@@ -98,6 +98,12 @@ else
      PRODUCT_COPY_FILES += vendor/mica/prebuilt/common/media/bootanimation_1080.zip:$(TARGET_COPY_OUT_PRODUCT)/media/bootanimation.zip
 endif
 
+# ColumbusService
+ifneq ($(TARGET_SUPPORTS_QUICK_TAP),false)
+PRODUCT_PACKAGES += \
+    ColumbusService
+endif
+
 -include vendor/mica-priv/keys/keys.mk
 $(call inherit-product-if-exists, vendor/certification/config.mk)
 
