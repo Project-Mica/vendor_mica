@@ -25,6 +25,10 @@ PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     ro.ota.allow_downgrade=true
 endif
 
+# Enable Material Design 3 Expressive
+PRODUCT_PRODUCT_PROPERTIES += \
+    is_expressive_design_enabled=true
+
 # Credential storage
 PRODUCT_PACKAGES += \
     android.software.credentials.prebuilt.xml
