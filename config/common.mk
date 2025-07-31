@@ -91,6 +91,18 @@ PRODUCT_PACKAGES += \
 
 include vendor/mica/config/version.mk
 
+# Include gms on all non-eng builds
+ifneq ($(TARGET_BUILD_VARIANT),eng)
+$(call inherit-product-if-exists, vendor/gms/products/gms.mk)
+endif
+
+# Bootanimation
+ifeq ($(TARGET_BOOT_ANIMATION_RES),1440p)
+     PRODUCT_COPY_FILES += vendor/mica/prebuilt/common/media/bootanimation_1440.zip:$(TARGET_COPY_OUT_PRODUCT)/media/bootanimation.zip
+else
+     PRODUCT_COPY_FILES += vendor/mica/prebuilt/common/media/bootanimation_1080.zip:$(TARGET_COPY_OUT_PRODUCT)/media/bootanimation.zip
+endif
+
 -include vendor/mica-priv/keys/keys.mk
 $(call inherit-product-if-exists, vendor/certification/config.mk)
 
