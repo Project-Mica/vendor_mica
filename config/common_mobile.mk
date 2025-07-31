@@ -8,7 +8,12 @@ PRODUCT_PACKAGES += \
 
 # Charger
 PRODUCT_PACKAGES += \
-    charger_res_images
+    product_charger_res_images
+
+# New charging information
+PRODUCT_PRODUCT_PROPERTIES += \
+    charging_string.apply_lotx=true \
+    charging_string.apply_v2=true
 
 # Media
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
