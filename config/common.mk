@@ -112,3 +112,16 @@ PRODUCT_PACKAGES += \
 endif
 
 -include $(WORKSPACE)/build_env/image-auto-bits.mk
+
+# OpenDelta
+PRODUCT_PACKAGES += \
+    OpenDelta
+
+# Permissions
+PRODUCT_COPY_FILES += \
+    vendor/mica/prebuilt/common/etc/permissions/mica-privapp-permissions.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/mica-privapp-permissions.xml \
+    vendor/mica/prebuilt/common/etc/permissions/mica-power-whitelist.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/sysconfig/mica-power-whitelist.xml
+
+# Copy all mica-specific init rc files
+$(foreach f,$(wildcard vendor/mica/prebuilt/common/etc/init/*.rc),\
+    $(eval PRODUCT_COPY_FILES += $(f):$(TARGET_COPY_OUT_SYSTEM)/etc/init/$(notdir $f)))
