@@ -4,8 +4,9 @@ GREEN="\033[1;32m"
 YELLOW="\033[1;33m"
 NC="\033[0m"
 
-# The base URL where the file is hosted
+# The base URL where the file is hosted.
 BASE_URL="https://dl.aswinaskurup.xyz/MicaOS/${device_code}"
+
 
 findPayloadOffset() {
     build=$1
@@ -46,6 +47,18 @@ if ! [ -f "$file_path" ]; then
     fi
 fi
 
+# Use MICA_EDITION for the filename.
+if [ -n "${MICA_EDITION}" ]; then
+    edition=$(echo "${MICA_EDITION}" | tr '[:upper:]' '[:lower:]')
+    output_filename="full_${edition}.json"
+else
+    
+    if ! return 0 &> /dev/null; then
+        exit 1
+    fi
+fi
+
+
 # Calculate the MD5 checksum
 # Use md5sum for Linux, or md5 for macOS/BSD
 md5_hash=$(md5sum "$file_path" | awk '{print $1}')
@@ -54,7 +67,7 @@ if [ -z "$md5_hash" ]; then
     md5_hash=$(md5 -q "$file_path")
 fi
 
-echo -e "${GREEN}Generating .json${NC}"
+echo -e "${GREEN}Generating JSON file: ${YELLOW}${output_filename}${NC}"
 
 isPayload=0
 [ -f payload_properties.txt ] && rm payload_properties.txt
@@ -76,7 +89,7 @@ datetime=$(date +%s)
     echo "      \"filename\": \"${file_name}\","
     echo "      \"url\": \"${BASE_URL}${file_name}\","
     echo -n "      \"md5\": \"${md5_hash}\""
-} > "${file_path}.json"
+} > "${file_dir}/${output_filename}"
 
 # Conditionally add the payload section
 if [[ $isPayload == 1 ]]; then
@@ -88,7 +101,7 @@ if [[ $isPayload == 1 ]]; then
         echo "${keyPairs}"
         echo "        }"
         echo "      ]"
-    } >> "${file_path}.json"
+    } >> "${file_dir}/${output_filename}"
 fi
 
 # Close the JSON structure
@@ -96,8 +109,7 @@ fi
     echo "    }"
     echo "  ]"
     echo "}"
-} >> "${file_path}.json"
+} >> "${file_dir}/${output_filename}"
 
-device_code=$(echo "${file_name}" | cut -d'-' -f4)
-mv "${file_path}.json" "${file_dir}/${device_code}.json"
-echo -e "${GREEN}Done generating ${YELLOW}${device_code}.json${NC}"
+
+echo -e "${GREEN}OTA JSON generated and saved as ${YELLOW}${output_filename}${NC}"
