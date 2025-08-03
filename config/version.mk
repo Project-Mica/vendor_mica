@@ -1,3 +1,11 @@
+# Include gms by default
+ifneq ($(TARGET_EXCLUDE_GMS),true)
+MICA_EDITION := GMS
+$(call inherit-product, vendor/gms/products/gms.mk)
+else
+MICA_EDITION := VANILLA
+endif
+
 # Versioning System
 MICA_BUILD_DATETIME := $(shell date +%s)
 MICA_BUILD_DATE := $(shell date -d @$(MICA_BUILD_DATETIME) +"%Y%m%d-%H%M%S")
@@ -13,4 +21,5 @@ PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
   ro.mica.buildtype=$(MICA_BUILD_TYPE) \
   ro.mica.version=$(MICA_VERSION) \
   ro.mica.device=$(MICA_BUILD) \
-  ro.modversion=$(MICA_VERSION)
+  ro.modversion=$(MICA_VERSION) \
+  ro.mica.edition=$(MICA_EDITION)
