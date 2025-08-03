@@ -1,9 +1,6 @@
 # Include gms by default
 ifneq ($(TARGET_EXCLUDE_GMS),true)
-MICA_EDITION := GMS
 $(call inherit-product, vendor/gms/products/gms.mk)
-else
-MICA_EDITION := VANILLA
 endif
 
 # Versioning System
