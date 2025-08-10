@@ -4,6 +4,9 @@
 # Recovery
 BOARD_USES_FULL_RECOVERY_IMAGE ?= true
 
+# Set vendor security patch
+VENDOR_SECURITY_PATCH ?= $(PLATFORM_SECURITY_PATCH)
+
 include vendor/mica/config/BoardConfigKernel.mk
 
 ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
