@@ -90,6 +90,13 @@
         <item>com.android.vending/com.google.android.finsky.systemupdate.SystemUpdateSettingsContentProvider</item>
         <item>com.android.vending/com.google.android.finsky.systemupdateactivity.SettingsSecurityEntryPoint</item>
         <item>com.android.vending/com.google.android.finsky.systemupdateactivity.SystemUpdateActivity</item>
+        <!-- Battery Health -->
+        <item>com.google.android.settings.intelligence/com.google.android.settings.intelligence.modules.battery.impl.health.BHSettingsProvider</item>
+        <item>com.google.android.settings.intelligence/com.google.android.settings.intelligence.modules.battery.impl.health.BHSettingsActivity</item>
+        <item>com.google.android.settings.intelligence/com.google.android.settings.intelligence.modules.battery.impl.chargingoptimization.ChargingOptimizationActivityInject</item>
+        <item>com.google.android.settings.intelligence/com.google.android.settings.intelligence.modules.battery.impl.chargingoptimization.ChargingOptimizationSearchIndexablesProvider</item>
+        <item>com.google.android.settings.intelligence/com.google.android.settings.intelligence.modules.battery.impl.chargingoptimization.ChargingOptimizationActivity</item>
+        <item>com.google.android.settings.intelligence/com.google.android.settings.intelligence.modules.battery.impl.chargingoptimization.ChargingOptimizationBootBroadcastReceiver</item>
     </string-array>
 
     <!-- Set this to true to enable the platform's auto-power-save modes like doze and
