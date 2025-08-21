@@ -5,13 +5,6 @@ GREEN="\033[1;32m"
 YELLOW="\033[1;33m"
 NC="\033[0m"
 
-# Set BASE_URL based on MICA_EDITION
-if [ "${MICA_EDITION}" = "RELEASE" ]; then
-    BASE_URL="https://drive.aswinas.workers.dev/0:/MicaOS/ota/${device_code}/"
-else
-    BASE_URL="https://drive.aswinas.workers.dev/0:/.Test/ota/${device_code}/"
-fi
-
 # Use MICA_EDITION for the filename.
 if [ -n "${MICA_EDITION}" ]; then
     edition=$(echo "${MICA_EDITION}" | tr '[:upper:]' '[:lower:]')
@@ -56,6 +49,15 @@ fi
 file_path=$1
 file_dir=$(dirname "$file_path")
 file_name=$(basename "$file_path")
+md5_hash=$(md5sum "$file_path" | cut -d' ' -f1)
+device_code=$(echo $file_name | cut -d'-' -f4)
+
+# Set BASE_URL based on MICA_EDITION
+if [ "${MICA_EDITION}" = "RELEASE" ]; then
+    BASE_URL="https://drive.aswinas.workers.dev/0:/MicaOS/ota/${device_code}/"
+else
+    BASE_URL="https://drive.aswinas.workers.dev/0:/.Test/ota/${device_code}/"
+fi
 
 # Check if file exists
 if ! [ -f "$file_path" ]; then
@@ -63,13 +65,6 @@ if ! [ -f "$file_path" ]; then
     if ! return 0 &> /dev/null; then
         exit 0
     fi
-fi
-
-# Calculate MD5 hash
-md5_hash=$(md5sum "$file_path" | awk '{print $1}')
-if [ -z "$md5_hash" ]; then
-    # Fallback for macOS/BSD
-    md5_hash=$(md5 -q "$file_path")
 fi
 
 echo -e "${GREEN}Generating JSON file: ${YELLOW}${output_filename}${NC}"
