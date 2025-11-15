@@ -59,7 +59,7 @@ type generatorProperties struct {
 	//
 	Cmd *string
 
-	// name of the modules (if any) that produces the host executable.   Leave empty for
+	// name of the modules (if any) that produces the host executable. Leave empty for
 	// prebuilts or scripts that do not need a module to build them.
 	Tools []string
 
@@ -141,44 +141,46 @@ func (g *Module) GenerateAndroidBuildActions(ctx android.ModuleContext) {
 		g.exportedSourceDirs = append(g.exportedSourceDirs, android.PathForModuleGen(ctx, ""))
 	}
 
+        seenTools := make(map[string]bool)
 	tools := map[string]android.Path{}
 
 	if len(g.properties.Tools) > 0 {
 		ctx.VisitDirectDepsProxyAllowDisabled(func(proxy android.ModuleProxy) {
 			module := android.PrebuiltGetPreferred(ctx, proxy)
-			switch ctx.OtherModuleDependencyTag(module) {
-			case hostToolDepTag:
+			switch tag := ctx.OtherModuleDependencyTag(proxy).(type) {
+			case hostToolDependencyTag:
 				tool := ctx.OtherModuleName(module)
 				var path android.OptionalPath
 
-				if t, ok := module.(HostToolProvider); ok {
-					if !t.(android.Module).Enabled(ctx) {
+				if t, ok := android.OtherModuleProvider(ctx, module, android.HostToolProviderInfoProvider); ok {
+					if !android.OtherModulePointerProviderOrDefault(ctx, module, android.CommonModuleInfoProvider).Enabled {
 						if ctx.Config().AllowMissingDependencies() {
 							ctx.AddMissingDependencies([]string{tool})
 						} else {
 							ctx.ModuleErrorf("depends on disabled module %q", tool)
+							return
 						}
-						break
 					}
-					path = t.HostToolPath()
-				} else {
-					ctx.ModuleErrorf("%q is not a host tool provider", tool)
-					break
-				}
+					path = t.HostToolPath
+					if !path.Valid() {
+						ctx.ModuleErrorf("host tool %q missing output file", tool)
+						return
+					}
 
-				if path.Valid() {
-					g.implicitDeps = append(g.implicitDeps, path.Path())
-					if _, exists := tools[tool]; !exists {
-						tools[tool] = path.Path()
-					} else {
-						ctx.ModuleErrorf("multiple tools for %q, %q and %q", tool, tools[tool], path.Path().String())
+					if _, exists := seenTools[tool]; exists {
+						ctx.ModuleErrorf("multiple host tools found for %q", tool)
+						return
 					}
+					seenTools[tool] = true
+
+					g.implicitDeps = append(g.implicitDeps, path.Path())
+					tools[tool] = path.Path()
 				} else {
 					ctx.ModuleErrorf("host tool %q missing output file", tool)
 				}
 			default:
-				if !android.IsSourceDepTagWithOutputTag(ctx.OtherModuleDependencyTag(module), "") {
-					ctx.ModuleErrorf("unknown dependency on %q", ctx.OtherModuleName(module))
+				if !android.IsSourceDepTagWithOutputTag(tag, "") {
+					ctx.ModuleErrorf("unknown dependency on %q", ctx.OtherModuleName(proxy))
 				}
 			}
 		})
@@ -188,7 +190,7 @@ func (g *Module) GenerateAndroidBuildActions(ctx android.ModuleContext) {
 		return
 	}
 
-	toolFiles := ctx.ExpandSources(g.properties.Tool_files, nil)
+	toolFiles := android.PathsForModuleSrc(ctx, g.properties.Tool_files)
 	for _, tool := range toolFiles {
 		g.implicitDeps = append(g.implicitDeps, tool)
 		if _, exists := tools[tool.Rel()]; !exists {
@@ -198,7 +200,7 @@ func (g *Module) GenerateAndroidBuildActions(ctx android.ModuleContext) {
 		}
 	}
 
-	// Determine root dir for dep_files.  Defaults to current ctx ModuleDir.
+	// Determine root dir for dep_files. Defaults to current ctx ModuleDir.
 	depRoot := String(g.properties.Dep_root)
 	if depRoot == "" {
 		depRoot = ctx.ModuleDir()
