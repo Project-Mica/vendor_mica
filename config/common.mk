@@ -41,9 +41,9 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     mica-component-overrides.xml
 
-# Enforce privapp-permissions whitelist
+# Log privapp-permissions whitelist
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
-    ro.control_privapp_permissions=enforce
+    ro.control_privapp_permissions=log
 
 # Do not include art debug targets
 PRODUCT_ART_TARGET_INCLUDE_DEBUG_BUILD := false
