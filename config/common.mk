@@ -146,5 +146,3 @@ include vendor/mica/config/fonts.mk
 # APEX
 DISABLE_DEXPREOPT_CHECK := true
 
-PRODUCT_PACKAGES += \
-    com.google.android.permission
