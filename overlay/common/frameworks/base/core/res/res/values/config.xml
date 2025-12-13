@@ -86,10 +86,6 @@
         <item>com.google.android.as/com.google.android.apps.miphone.aiai.translate.setupui.TranslateSetupActivity</item>
         <item>com.google.android.as/com.google.android.apps.miphone.aiai.translate.settings.settingsui.AutoTranslateSettingPreferenceActivity</item>
         <item>com.google.android.as/com.google.android.apps.miphone.aiai.translate.settings.settingsui.AutoTranslateSettingPortalActivity</item>
-	<!-- GPSU -->
-        <item>com.android.vending/com.google.android.finsky.systemupdate.SystemUpdateSettingsContentProvider</item>
-        <item>com.android.vending/com.google.android.finsky.systemupdateactivity.SettingsSecurityEntryPoint</item>
-        <item>com.android.vending/com.google.android.finsky.systemupdateactivity.SystemUpdateActivity</item>
         <!-- Battery Health -->
         <item>com.google.android.settings.intelligence/com.google.android.settings.intelligence.modules.battery.impl.health.BHSettingsProvider</item>
         <item>com.google.android.settings.intelligence/com.google.android.settings.intelligence.modules.battery.impl.health.BHSettingsActivity</item>
