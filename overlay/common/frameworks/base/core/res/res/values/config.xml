@@ -353,6 +353,7 @@
         <item>launcher/TWO_STAGE_DURATION_PERCENTAGE=200</item>
         <item>launcher/TWO_STAGE_SLOP_PERCENTAGE=66</item>
         <item>launcher/android.provider.launcher_data_access=true</item>
+        <item>launcher/PSB_RESKIN=true</item>
 
         <!-- Pixel Launcher (Recents) -->
         <item>device_personalization_services/Overview__enable_barcode_detection=true</item>
