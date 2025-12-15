@@ -476,4 +476,6 @@
 
     <!-- Whether the developer option for desktop mode is supported on the current device  -->
     <bool name="config_isDesktopModeDevOptionSupported">true</bool>
+
+  <bool name="config_reduceBrightColorsAvailable">true</bool>
 </resources>
