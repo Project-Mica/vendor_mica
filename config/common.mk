@@ -96,7 +96,8 @@ PRODUCT_PACKAGE_OVERLAYS += \
     vendor/mica/overlay/no-rro
 
 PRODUCT_PACKAGES += \
-    NetworkStackOverlay
+    NetworkStackOverlay \
+    SettingsMica
 
 include vendor/mica/config/version.mk
 
