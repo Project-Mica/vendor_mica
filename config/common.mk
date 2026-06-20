@@ -128,8 +128,8 @@ endif
 -include $(WORKSPACE)/build_env/image-auto-bits.mk
 
 # OpenDelta
-PRODUCT_PACKAGES += \
-    OpenDelta
+#PRODUCT_PACKAGES += \
+#    OpenDelta
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -143,7 +143,7 @@ $(foreach f,$(wildcard vendor/mica/prebuilt/common/etc/init/*.rc),\
 # Fonts
 include vendor/mica/config/fonts.mk
 # APEX
-DISABLE_DEXPREOPT_CHECK := true
+#DISABLE_DEXPREOPT_CHECK := true
 
-PRODUCT_PACKAGES += \
-    com.google.android.permission
+#PRODUCT_PACKAGES += \
+#    com.google.android.permission

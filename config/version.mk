@@ -1,6 +1,6 @@
 # Include gms by default
 ifneq ($(TARGET_EXCLUDE_GMS),true)
-$(call inherit-product, vendor/gms/products/gms.mk)
+#$(call inherit-product, vendor/gms/products/gms.mk)
 endif
 
 # Versioning System
