@@ -148,9 +148,10 @@ func (g *Module) GenerateAndroidBuildActions(ctx android.ModuleContext) {
 			switch ctx.OtherModuleDependencyTag(module) {
 			case hostToolDepTag:
 				tool := ctx.OtherModuleName(module)
-				if h := android.GetHostToolInfo(ctx, module); h != nil {
-					path := h.HostToolPath
-					if !path.Valid() {
+				var path android.OptionalPath
+
+				if t := android.GetHostToolInfo(ctx, module); t != nil {
+					if !t.HostToolPath.Valid() {
 						if ctx.Config().AllowMissingDependencies() {
 							ctx.AddMissingDependencies([]string{tool})
 						} else {
@@ -158,6 +159,13 @@ func (g *Module) GenerateAndroidBuildActions(ctx android.ModuleContext) {
 						}
 						break
 					}
+					path = t.HostToolPath
+				} else {
+					ctx.ModuleErrorf("%q is not a host tool provider", tool)
+					break
+				}
+
+				if path.Valid() {
 					g.implicitDeps = append(g.implicitDeps, path.Path())
 					if _, exists := tools[tool]; !exists {
 						tools[tool] = path.Path()
@@ -165,12 +173,7 @@ func (g *Module) GenerateAndroidBuildActions(ctx android.ModuleContext) {
 						ctx.ModuleErrorf("multiple tools for %q, %q and %q", tool, tools[tool], path.Path().String())
 					}
 				} else {
-					if ctx.Config().AllowMissingDependencies() {
-						ctx.AddMissingDependencies([]string{tool})
-					} else {
-						ctx.ModuleErrorf("%q is not a host tool provider", tool)
-						break
-					}
+					ctx.ModuleErrorf("host tool %q missing output file", tool)
 				}
 			default:
 				if !android.IsSourceDepTagWithOutputTag(ctx.OtherModuleDependencyTag(module), "") {
@@ -253,11 +256,8 @@ func (g *Module) GenerateAndroidBuildActions(ctx android.ModuleContext) {
 	// Dummy output dep
 	dummyDep := android.PathForModuleGen(ctx, ".dummy_dep")
 
-	genDir := android.PathForModuleGen(ctx)
-	manifestPath := android.PathForModuleOut(ctx, "generator.sbox.textproto")
-
-	// Use a RuleBuilder to create a rule that runs the command inside an sbox sandbox.
-	rule := android.NewRuleBuilder(pctx, ctx).Sbox(genDir, manifestPath)
+	// Don't sandbox: the command operates directly on the source tree
+	rule := android.NewRuleBuilder(pctx, ctx).SandboxDisabled()
 
 	rule.Command().
 		Text(rawCommand).
