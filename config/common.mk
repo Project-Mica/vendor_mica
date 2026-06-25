@@ -147,3 +147,5 @@ include vendor/mica/config/fonts.mk
 
 #PRODUCT_PACKAGES += \
 #    com.google.android.permission
+
+PRODUCT_ENFORCE_SELINUX_TREBLE_LABELING := false
